@@ -2,37 +2,17 @@ package com.zhukovartemvl.jetnotes.main_screen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.tooling.preview.Preview
-import com.zhukovartemvl.jetnotes.common_ui.JetNotesTheme
+import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationView
+import org.koin.android.ext.android.inject
+
 
 class MainActivity : AppCompatActivity() {
+
+    private val appView: AppNavigationView by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            JetNotesTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
-        }
+        setContentView(appView.content(this))
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    JetNotesTheme {
-        Greeting("Android")
-    }
-}

@@ -20,4 +20,3 @@ private fun getDatabase(context: Context) =
     Room.databaseBuilder(context, AppDatabase::class.java, context.getString(R.string.db_name))
         .fallbackToDestructiveMigration()
         .build()
-
