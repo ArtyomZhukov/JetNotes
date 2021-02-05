@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">JetNotes</string>
+    <string name="db_name" translatable="false">JetNotesDatabase</string>
+</resources>
+
