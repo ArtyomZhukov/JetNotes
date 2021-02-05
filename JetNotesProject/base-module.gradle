@@ -1,0 +1,43 @@
+apply plugin: "kotlin-android"
+apply plugin: 'kotlin-kapt'
+apply from: rootProject.file("dependencies.gradle")
+
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "../proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+}
+
+kapt {
+    useBuildCache = true
+}
+
+dependencies {
+    if (path != ":shared:common") {
+        implementation project(":shared:common")
+    }
+    implementation deps.coroutinesCore
+    implementation deps.coroutinesAndroid
+    implementation deps.androidXCoreKtx
+    implementation deps.koin
+}
+

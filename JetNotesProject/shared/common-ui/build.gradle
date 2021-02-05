@@ -1,0 +1,29 @@
+apply from: rootProject.file("library.gradle")
+
+android {
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion kotlin_version
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+}
+
+dependencies {
+    api deps.material
+
+    api deps.composeUI
+    api deps.composeMaterial
+    api deps.composeUITooling
+    api deps.composeNavigation
+
+    api deps.navigationUI
+}
+

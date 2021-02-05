@@ -1,0 +1,21 @@
+apply from: rootProject.file("library.gradle")
+
+android {
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion kotlin_version
+    }
+}
+
+dependencies {
+    implementation project(":shared:common")
+    implementation project(":shared:common-ui")
+    implementation project(":shared:resources")
+
+    implementation deps.koinCompose
+}
+

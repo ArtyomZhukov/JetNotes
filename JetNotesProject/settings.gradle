@@ -1,2 +1,9 @@
 rootProject.name = "JetNotes"
+
 include ':app'
+include ':shared:common'
+include ':shared:common-ui'
+include ':shared:resources'
+include ':data'
+include ':feature:ui-main-screen'
+include ':feature:ui-note-editor'

@@ -1,0 +1,8 @@
+apply from: rootProject.file("library.gradle")
+
+
+dependencies {
+    implementation deps.roomRuntime
+    implementation deps.roomKtx
+    kapt deps.roomCompiler
+}
