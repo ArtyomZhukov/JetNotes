@@ -6,6 +6,6 @@ data class Note(
     var title: String = "",
     var content: String = "",
     var createdTime: Long = 0,
-    var changedTime: Long = 0
+    var changedTime: Long = 0,
+    var isSelected: Boolean = false
 )
-

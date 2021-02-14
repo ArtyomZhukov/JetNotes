@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">JetNotes</string>
+    <string name="new_note">New note</string>
+    <string name="search_notes">Search notes</string>
+    <string name="title">Title</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_notes_dialog_title">Delete notes?</string>
 </resources>

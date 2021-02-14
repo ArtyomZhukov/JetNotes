@@ -12,7 +12,7 @@ import com.zhukovartemvl.jetnotes.common_ui.JetNotesTheme
 import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationView
 import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationParams
 import com.zhukovartemvl.jetnotes.main_screen.AboutScreen
-import com.zhukovartemvl.jetnotes.main_screen.MainScreen
+import com.zhukovartemvl.jetnotes.main_screen.screen.main.MainScreen
 import com.zhukovartemvl.jetnotes.note_editor.NoteEditorScreen
 
 
