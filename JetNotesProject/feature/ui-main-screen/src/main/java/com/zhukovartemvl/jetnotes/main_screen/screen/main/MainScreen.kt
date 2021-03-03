@@ -12,21 +12,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientConfiguration
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationParams
 import androidx.navigation.compose.navigate
 import com.zhukovartemvl.jetnotes.common_ui.components.LazyGrid
+import com.zhukovartemvl.jetnotes.common_ui.getViewModel
+import com.zhukovartemvl.jetnotes.common_ui.navigation.BackButtonHandler
 import com.zhukovartemvl.jetnotes.main_screen.R
 import com.zhukovartemvl.jetnotes.main_screen.components.AddNoteFloatingButton
 import com.zhukovartemvl.jetnotes.main_screen.components.NoteItem
 import com.zhukovartemvl.jetnotes.main_screen.components.app_bar.DefaultAppBar
 import com.zhukovartemvl.jetnotes.main_screen.components.app_bar.SearchAppBar
 import com.zhukovartemvl.jetnotes.main_screen.components.app_bar.SelectionModeAppBar
-import com.zhukovartemvl.jetnotes.main_screen.components.dialogs.CreateNoteDialog
 import com.zhukovartemvl.jetnotes.main_screen.components.dialogs.DeleteNotesDialog
-import org.koin.androidx.compose.getViewModel
 import com.zhukovartemvl.jetnotes.main_screen.screen.main.MainScreenContract.*
 
 
@@ -42,7 +42,7 @@ fun MainScreen(
         },
         floatingActionButton = {
             if (state.screenState is ScreenState.DefaultList) {
-                AddNoteFloatingButton(onClick = { viewModel.setEvent(Event.OnAddNoteFabClicked) })
+                AddNoteFloatingButton(onClick = { navController.navigate(AppNavigationParams.Screen.NoteEditor()) })
             }
         },
         bottomBar = {
@@ -52,6 +52,13 @@ fun MainScreen(
         }) {
         MainScreenContent(state, navController) { e -> viewModel.setEvent(e) }
     }
+
+    val (enableBackHandler: Boolean, onBackPressed: () -> Unit) = when (state.screenState) {
+        is ScreenState.Search -> true to { viewModel.setEvent(Event.OnSearchCancel) }
+        is ScreenState.Selection -> true to { viewModel.setEvent(Event.OnSelectionCancel) }
+        else -> false to {}
+    }
+    BackButtonHandler(enabled = enableBackHandler, onBackPressed = onBackPressed)
 }
 
 @Composable
@@ -83,7 +90,7 @@ private fun MainScreenContent(
     if (state.screenState is ScreenState.Loading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
     } else {
-        val orientation = AmbientConfiguration.current.orientation
+        val orientation = LocalConfiguration.current.orientation
         val rowsCount = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
         val isSelectionMode = state.screenState is ScreenState.Selection
 
@@ -102,7 +109,8 @@ private fun MainScreenContent(
                     if (!isSelectionMode) {
                         setEvent(Event.OnSelectionEnable(noteId))
                     }
-                }
+                },
+                removeEmptyNote = { noteId -> setEvent(Event.OnDeleteEmptyNote(noteId)) }
             )
         }
 
@@ -114,7 +122,9 @@ private fun MainScreenContent(
 private fun BottomBar(onDeleteItemsClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().background(color = Color.LightGray)
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.LightGray)
     ) {
         IconButton(onClick = { onDeleteItemsClick() }) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = null)
@@ -128,10 +138,6 @@ private fun Dialogs(
     setEvent: (event: Event) -> Unit
 ) {
     when (dialogState) {
-        is DialogState.CreateNote -> CreateNoteDialog(
-            onCreate = { title -> setEvent(Event.OnAddNoteDialogAccepted(title)) },
-            onDismiss = { setEvent(Event.OnDialogDismiss) }
-        )
         is DialogState.DeleteNotes -> DeleteNotesDialog(
             title = stringResource(id = R.string.delete_notes_dialog_title),
             subtitle = dialogState.selectedNotesCount.toString(),

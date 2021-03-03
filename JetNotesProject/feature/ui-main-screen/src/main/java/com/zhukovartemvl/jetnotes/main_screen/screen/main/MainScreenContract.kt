@@ -7,11 +7,8 @@ import com.zhukovartemvl.jetnotes.common_ui.mvi_base.UiState
 
 
 class MainScreenContract {
-    sealed class Event : UiEvent {
-        object OnAddNoteFabClicked : Event()
-        class OnAddNoteDialogChangedTitle(val newTitle: String): Event()
-        class OnAddNoteDialogAccepted(val title: String) : Event()
 
+    sealed class Event : UiEvent {
         object OnSearchEnable : Event()
         class OnSearchChanged(val searchFilter: String) : Event()
         object OnSearchClear : Event()
@@ -24,6 +21,8 @@ class MainScreenContract {
 
         object OnDeleteSelectedNotes : Event()
         object OnDeleteSelectedNotesDialogAccepted : Event()
+
+        class OnDeleteEmptyNote(val noteId: Int) : Event()
 
         object OnDialogDismiss : Event()
     }
@@ -43,12 +42,8 @@ class MainScreenContract {
 
     sealed class DialogState {
         object None : DialogState()
-        class CreateNote(val title: String) : DialogState()
         class DeleteNotes(val selectedNotesCount: Int) : DialogState()
     }
 
-    sealed class Action : UiAction {
-        object NewNoteAddedMessage : Action()
-        class NotesDeletedMessage(val deletedMotesCount: Int) : Action()
-    }
+    sealed class Action : UiAction
 }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,30 +19,36 @@ import com.zhukovartemvl.jetnotes.common.utils.toDateString
 import com.zhukovartemvl.jetnotes.resources.R
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NoteItem(
+internal fun NoteItem(
     note: Note,
     isSelectionMode: Boolean,
     onItemClick: (noteId: Int) -> Unit,
-    onLongItemClick: (noteId: Int) -> Unit
+    onLongItemClick: (noteId: Int) -> Unit,
+    removeEmptyNote: (noteId: Int) -> Unit
 ) {
+    if (note.title.isEmpty() && note.content.isEmpty()) {
+        removeEmptyNote(note.id)
+    }
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .clickable(
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(
                 onClick = { onItemClick(note.id) },
                 onLongClick = { onLongItemClick(note.id) }
             )
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
             Text(text = note.title)
-            Spacer(modifier = Modifier.preferredHeight(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = note.content,
                 maxLines = 4,
                 fontSize = 12.sp,
                 color = Color.Black.copy(alpha = 0.8f)
             )
-            Spacer(modifier = Modifier.preferredHeight(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(text = note.changedTime.toDateString())
         }
         if (isSelectionMode) {
@@ -58,12 +65,13 @@ fun NoteItem(
 
 @Composable
 private fun SelectionMarker(isSelected: Boolean) {
-    val icon = if (isSelected) Icons.Default.CheckCircle else vectorResource(R.drawable.ic_circle)
+    val icon =
+        if (isSelected) Icons.Default.CheckCircle else ImageVector.vectorResource(R.drawable.ic_circle)
     val tint = if (isSelected) Color.Blue.copy(alpha = 0.75f) else Color.LightGray
     Icon(
         imageVector = icon,
         tint = tint,
-        modifier = Modifier.preferredSize(24.dp),
+        modifier = Modifier.size(24.dp),
         contentDescription = null
     )
 }
@@ -79,7 +87,8 @@ private fun NoteItemPreview() {
         ),
         isSelectionMode = false,
         onItemClick = {},
-        onLongItemClick = {}
+        onLongItemClick = {},
+        removeEmptyNote = {}
     )
 }
 
@@ -94,6 +103,7 @@ private fun NoteItemSelectedPreview() {
         ),
         isSelectionMode = true,
         onItemClick = {},
-        onLongItemClick = {}
+        onLongItemClick = {},
+        removeEmptyNote = {}
     )
 }

@@ -40,8 +40,8 @@ dependencies {
     }
     implementation deps.coroutinesCore
     implementation deps.coroutinesAndroid
-    implementation deps.androidXCoreKtx
-//    implementation deps.androidXActivity
+    implementation deps.coreKtx
+    implementation deps.activityCompose
     implementation deps.koin
 }
 

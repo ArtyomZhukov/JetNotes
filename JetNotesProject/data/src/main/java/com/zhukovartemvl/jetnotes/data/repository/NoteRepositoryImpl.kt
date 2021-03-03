@@ -11,13 +11,14 @@ import kotlinx.coroutines.flow.map
 
 class NoteRepositoryImpl(private val database: AppDatabase) : NoteRepository {
 
-    override fun addNote(note: Note) {
-        database.noteDao().insert(note.toNoteEntity())
+    override fun addNote(note: Note): Note {
+        val newNoteId = database.noteDao().insert(note.toNoteEntity())
+        return database.noteDao().getById(newNoteId.toInt()).toNote()
     }
 
-    override fun addNote(title: String) {
+    override fun addNote(title: String): Note {
         val createdTime = System.currentTimeMillis()
-        addNote(Note(title = title, createdTime = createdTime, changedTime = createdTime))
+        return addNote(Note(title = title, createdTime = createdTime, changedTime = createdTime))
     }
 
     override fun editNoteTitle(id: Int, title: String) {

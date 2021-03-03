@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import com.zhukovartemvl.jetnotes.common_ui.JetNotesTheme
+import com.zhukovartemvl.jetnotes.common_ui.ui.JetNotesTheme
 import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationView
 import com.zhukovartemvl.jetnotes.common_ui.navigation.AppNavigationParams
 import com.zhukovartemvl.jetnotes.main_screen.AboutScreen

@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    fun addNote(note: Note)
-    fun addNote(title: String)
+    fun addNote(note: Note): Note
+    fun addNote(title: String): Note
     fun editNoteTitle(id: Int, title: String)
     fun editNoteContent(id: Int, content: String)
     fun deleteNoteById(id: Int)

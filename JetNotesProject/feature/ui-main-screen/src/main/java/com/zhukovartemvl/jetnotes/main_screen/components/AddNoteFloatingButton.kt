@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun AddNoteFloatingButton(onClick: ()-> Unit){
+internal fun AddNoteFloatingButton(onClick: () -> Unit) {
     FloatingActionButton(onClick = { onClick() }) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = null)
     }

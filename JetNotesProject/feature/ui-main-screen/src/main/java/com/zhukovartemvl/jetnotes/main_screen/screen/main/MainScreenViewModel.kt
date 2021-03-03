@@ -19,7 +19,7 @@ class MainScreenViewModel(private val notesRepository: NoteRepository) :
         }
     }
 
-    private fun loadNotes(searchFilter: String? = null) = viewModelScope.launch {
+    private fun loadNotes(searchFilter: String? = null) = viewModelScope.launch(Dispatchers.IO) {
         notesRepository.getAllNotesAsFlow().collect { notesList ->
             if (searchFilter == null) {
                 setState { copy(screenState = ScreenState.DefaultList, notesList = notesList) }
@@ -33,7 +33,6 @@ class MainScreenViewModel(private val notesRepository: NoteRepository) :
             }
         }
     }
-
 
     private fun List<Note>.filterByNameAndContent(searchFilter: String) = this.filter { note ->
         note.title.contains(searchFilter) || note.content.contains(searchFilter)
@@ -49,21 +48,11 @@ class MainScreenViewModel(private val notesRepository: NoteRepository) :
 
     override fun handleEvent(event: Event) {
         when (event) {
-            Event.OnAddNoteFabClicked -> {
-                setState { copy(dialogState = DialogState.CreateNote(title = "")) }
-            }
-            is Event.OnAddNoteDialogChangedTitle -> {
-                setState { copy(dialogState = DialogState.CreateNote(title = event.newTitle)) }
-            }
-            is Event.OnAddNoteDialogAccepted -> viewModelScope.launch(Dispatchers.IO) {
-                notesRepository.addNote(event.title)
-                setState { copy(dialogState = DialogState.None) }
-            }
-
             is Event.OnSelectionEnable -> {
                 currentState.notesList.firstOrNull { it.id == event.firstSelectedItemId }
                     ?.let { note -> note.isSelected = true }
-                setState { copy(screenState = ScreenState.Selection(1)) }
+                val selectedItemsCount = currentState.notesList.count { it.isSelected }
+                setState { copy(screenState = ScreenState.Selection(selectedItemsCount)) }
             }
             Event.OnSelectAllNotes -> {
                 val isAllSelected = currentState.notesList.all { it.isSelected }
@@ -78,13 +67,19 @@ class MainScreenViewModel(private val notesRepository: NoteRepository) :
                 val selectedItemsCount = currentState.notesList.count { it.isSelected }
                 setState { copy(screenState = ScreenState.Selection(selectedItemsCount)) }
             }
-            Event.OnDeleteSelectedNotes -> viewModelScope.launch(Dispatchers.IO) {
-                val notesToRemove = currentState.notesList.filter { it.isSelected }
-                notesRepository.deleteNotes(notesToRemove)
-            }
             Event.OnSelectionCancel -> {
                 currentState.notesList.forEach { it.isSelected = false }
                 setState { copy(screenState = ScreenState.DefaultList) }
+            }
+
+            Event.OnDeleteSelectedNotes -> {
+                val notesToRemove = currentState.notesList.filter { it.isSelected }
+                setState { copy(dialogState = DialogState.DeleteNotes(notesToRemove.size)) }
+            }
+            Event.OnDeleteSelectedNotesDialogAccepted -> viewModelScope.launch(Dispatchers.IO) {
+                val notesToRemove = currentState.notesList.filter { it.isSelected }
+                notesRepository.deleteNotes(notesToRemove)
+                setState { copy(dialogState = DialogState.None) }
             }
 
             Event.OnSearchEnable -> {
@@ -100,11 +95,12 @@ class MainScreenViewModel(private val notesRepository: NoteRepository) :
             Event.OnSearchClear -> {
                 loadNotes("")
             }
+
             Event.OnDialogDismiss -> {
                 setState { copy(dialogState = DialogState.None) }
             }
-            Event.OnDeleteSelectedNotesDialogAccepted -> {
-
+            is Event.OnDeleteEmptyNote -> viewModelScope.launch(Dispatchers.IO) {
+                notesRepository.deleteNoteById(event.noteId)
             }
         }
     }

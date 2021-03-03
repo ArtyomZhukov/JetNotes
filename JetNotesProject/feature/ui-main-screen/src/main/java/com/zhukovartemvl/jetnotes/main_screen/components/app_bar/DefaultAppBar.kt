@@ -15,7 +15,7 @@ import com.zhukovartemvl.jetnotes.main_screen.R
 
 
 @Composable
-fun DefaultAppBar(onSearchButtonClick: () -> Unit, onAboutButtonClick: () -> Unit) {
+internal fun DefaultAppBar(onSearchButtonClick: () -> Unit, onAboutButtonClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = stringResource(R.string.app_name)) },
         actions = {

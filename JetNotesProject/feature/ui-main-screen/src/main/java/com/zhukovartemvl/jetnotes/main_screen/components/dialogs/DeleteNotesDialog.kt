@@ -9,7 +9,7 @@ import com.zhukovartemvl.jetnotes.main_screen.R
 
 
 @Composable
-fun DeleteNotesDialog(title: String, subtitle: String, onAccept: () -> Unit, onDismiss: () -> Unit) {
+internal fun DeleteNotesDialog(title: String, subtitle: String, onAccept: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = title) },

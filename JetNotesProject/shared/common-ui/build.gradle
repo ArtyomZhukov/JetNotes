@@ -23,6 +23,7 @@ dependencies {
     api deps.composeMaterial
     api deps.composeUITooling
     api deps.composeNavigation
+    api deps.viewModelCompose
 
     api deps.navigationUI
 }

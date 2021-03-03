@@ -10,7 +10,7 @@ import androidx.room.Delete
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(note: NoteEntity)
+    fun insert(note: NoteEntity): Long
 
     @Update
     fun update(note: NoteEntity)

@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun SelectionModeAppBar(
+internal fun SelectionModeAppBar(
     selectedItemsCount: Int,
     onCancelClick: () -> Unit,
     onSelectAllClick: () -> Unit

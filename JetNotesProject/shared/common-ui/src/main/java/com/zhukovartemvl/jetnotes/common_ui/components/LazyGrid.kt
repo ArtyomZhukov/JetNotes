@@ -22,7 +22,7 @@ fun <T> LazyGrid(
     LazyColumn(modifier = Modifier.padding(horizontal = hPadding.dp)) {
         itemsIndexed(chunkedList) { index: Int, rowList: List<T> ->
             if (index == 0) {
-                Spacer(modifier = Modifier.preferredHeight(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             Row {
                 rowList.forEachIndexed { rowIndex, item ->

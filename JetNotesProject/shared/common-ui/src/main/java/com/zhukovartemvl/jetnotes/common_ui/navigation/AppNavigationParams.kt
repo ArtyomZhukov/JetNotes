@@ -6,7 +6,7 @@ object AppNavigationParams {
     object Screen {
         const val Main = "main"
         const val About = "about"
-        fun NoteEditor(noteId: Int) = Path.NoteEditor + noteId
+        fun NoteEditor(noteId: Int = -1) = Path.NoteEditor + noteId
     }
 
     object Destination {
